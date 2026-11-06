@@ -300,11 +300,11 @@ async fn dispatch(cli: Cli) -> anyhow::Result<u8> {
             std::fs::create_dir_all(&output)?;
             std::fs::write(
                 output.join("config.schema.json"),
-                serde_json::to_string_pretty(&schemars_config())?,
+                format!("{}\n", serde_json::to_string_pretty(&schemars_config())?),
             )?;
             std::fs::write(
                 output.join("report.schema.json"),
-                serde_json::to_string_pretty(&schemars_report())?,
+                format!("{}\n", serde_json::to_string_pretty(&schemars_report())?),
             )?;
             Ok(0)
         }
