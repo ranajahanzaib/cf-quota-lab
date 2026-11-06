@@ -130,8 +130,8 @@ pnpm format:check
 
 The Workers tests use the current official `@cloudflare/vitest-plugin` integration and genuine local D1/KV. The integration suite asserts both successful and intentionally failing CLI runs, then validates schema conformance. It also verifies index fixes, deterministic outages, missing coverage, startup failures, timeouts, redirect refusal and remote safety.
 
-[CI](.github/workflows/ci.yml) runs these checks without Cloudflare credentials and uploads reports even when checks fail. [The reusable example workflow](.github/workflows/quotalab-example.yml) runs the healthy managed fixture and writes a job summary. GitHub-hosted execution must be verified after pushing; local execution is covered by the suite.
+[CI](.github/workflows/ci.yml) runs these checks without Cloudflare credentials and uploads reports even when checks fail. [The reusable example workflow](.github/workflows/quotalab-example.yml) runs the healthy managed fixture and writes a job summary.
 
 Further reading: [getting started](docs/getting-started.md), [architecture](docs/architecture.md), [resource accounting](docs/resource-accounting.md), [fault injection](docs/fault-injection.md), [D1 analysis](docs/d1-analysis.md), [CI integration](docs/ci-integration.md), [limitations](docs/limitations.md).
 
-Existing [contributing guidance](CONTRIBUTING.md), [code of conduct](CODE_OF_CONDUCT.md), and [security policy](.github/SECURITY.md) remain in place. Changes should include regression coverage and preserve honest measurement provenance. Licensed under [MIT](LICENSE).
+Contributions should follow the [contributing guide](CONTRIBUTING.md) and [code of conduct](CODE_OF_CONDUCT.md). To report a vulnerability, see the [security policy](.github/SECURITY.md). QuotaLab is licensed under the [MIT License](LICENSE).
