@@ -44,3 +44,16 @@ We welcome contributions of all kinds to improve this project! Here's how you ca
 ### Issues
 
 Feel free to report bugs or suggest enhancements by creating an issue. Be sure to include detailed information about the problem and, if possible, steps to reproduce it.
+
+### QuotaLab development
+
+Install with `corepack pnpm install --frozen-lockfile` and `cargo build --workspace`. Before submitting, run
+`cargo fmt --all -- --check`, warning-denied Clippy, `cargo test --workspace`,
+`pnpm build`, `pnpm typecheck`, `pnpm test`, `pnpm test:integration`,
+`pnpm check:schemas`, and `pnpm format:check`.
+
+Keep metric provenance explicit. Missing resource measurements must remain unknown;
+new wrappers need tests for native receivers, return values, exceptions and
+concurrent request isolation. Changes to configuration/report models require
+regenerating schemas using `target/debug/quotalab schemas`. Do not include private
+request data, bound SQL parameters or test tokens in fixtures or report artifacts.

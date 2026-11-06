@@ -1,0 +1,39 @@
+{
+  "name": "quotalab-workspace",
+  "private": true,
+  "scripts": {
+    "build": "pnpm --filter @quotalab/worker build",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:integration": "node scripts/integration.mjs",
+    "check:schemas": "node scripts/validate-schemas.mjs",
+    "types:generate": "wrangler types --config examples/basic-worker/wrangler.jsonc examples/basic-worker/worker-configuration.d.ts --include-runtime=false --strict-vars=false",
+    "types:check": "wrangler types --config examples/basic-worker/wrangler.jsonc examples/basic-worker/worker-configuration.d.ts --include-runtime=false --strict-vars=false --check",
+    "format:check": "prettier --check \"packages/**/*.ts\" \"examples/**/src/*.ts\" \"scripts/*.mjs\" \"docs/*.md\" README.md package.json tsconfig.json vitest.config.ts vitest.benchmark.config.ts \".github/workflows/*.yml\"",
+    "format": "prettier --write \"packages/**/*.ts\" \"examples/**/src/*.ts\" \"scripts/*.mjs\" \"docs/*.md\" README.md package.json tsconfig.json vitest.config.ts vitest.benchmark.config.ts \".github/workflows/*.yml\"",
+    "bench": "vitest run --config vitest.benchmark.config.ts"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "1.4.11",
+    "@cloudflare/workers-types": "5.20261101.1",
+    "ajv": "8.20.0",
+    "prettier": "3.9.10",
+    "typescript": "7.0.2",
+    "vitest": "5.0.5",
+    "wrangler": "4.156.0",
+    "yaml": "2.9.1"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.0",
+    "pnpm": ">=10.0.0"
+  },
+  "packageManager": "pnpm@12.3.4",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@cloudflare/workerd",
+      "esbuild",
+      "sharp"
+    ]
+  }
+}

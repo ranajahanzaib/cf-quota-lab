@@ -1,0 +1,529 @@
+{
+  "$defs": {
+    "Budgets": {
+      "additionalProperties": false,
+      "properties": {
+        "d1": {
+          "$ref": "#/$defs/D1Budgets",
+          "default": {
+            "max_projected_rows_read_per_day": null,
+            "max_projected_rows_written_per_day": null,
+            "max_queries_per_request": null,
+            "max_rows_read_per_request": null,
+            "max_rows_written_per_request": null
+          }
+        },
+        "kv": {
+          "$ref": "#/$defs/KvBudgets",
+          "default": {
+            "max_projected_deletes_per_day": null,
+            "max_projected_lists_per_day": null,
+            "max_projected_reads_per_day": null,
+            "max_projected_writes_per_day": null
+          }
+        },
+        "worker": {
+          "$ref": "#/$defs/WorkerBudgets",
+          "default": {
+            "max_cpu_ms_per_request": null,
+            "max_external_subrequests_per_request": null,
+            "max_requests_per_day": null
+          }
+        }
+      },
+      "type": "object"
+    },
+    "D1Budgets": {
+      "additionalProperties": false,
+      "properties": {
+        "max_projected_rows_read_per_day": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "max_projected_rows_written_per_day": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "max_queries_per_request": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "max_rows_read_per_request": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "max_rows_written_per_request": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "Expectation": {
+      "additionalProperties": false,
+      "properties": {
+        "fault_triggered": {
+          "default": false,
+          "type": "boolean"
+        },
+        "json_contains": {
+          "default": null
+        },
+        "status": {
+          "format": "uint16",
+          "maximum": 599,
+          "minimum": 100,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "type": "object"
+    },
+    "Fault": {
+      "additionalProperties": false,
+      "properties": {
+        "after": {
+          "default": 1,
+          "format": "uint32",
+          "minimum": 1,
+          "type": "integer"
+        },
+        "delay_ms": {
+          "default": 0,
+          "format": "uint32",
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "kind": {
+          "$ref": "#/$defs/FaultKind"
+        },
+        "operation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "service": {
+          "$ref": "#/$defs/Service"
+        }
+      },
+      "required": [
+        "service",
+        "kind"
+      ],
+      "type": "object"
+    },
+    "FaultKind": {
+      "enum": [
+        "unavailable",
+        "exhausted",
+        "latency"
+      ],
+      "type": "string"
+    },
+    "Format": {
+      "enum": [
+        "terminal",
+        "json",
+        "markdown"
+      ],
+      "type": "string"
+    },
+    "KvBudgets": {
+      "additionalProperties": false,
+      "properties": {
+        "max_projected_deletes_per_day": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "max_projected_lists_per_day": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "max_projected_reads_per_day": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "max_projected_writes_per_day": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "Missing": {
+      "enum": [
+        "warn",
+        "fail",
+        "ignore"
+      ],
+      "type": "string"
+    },
+    "Mode": {
+      "enum": [
+        "local",
+        "remote"
+      ],
+      "type": "string"
+    },
+    "Policy": {
+      "additionalProperties": false,
+      "properties": {
+        "fail_on": {
+          "$ref": "#/$defs/Severity"
+        },
+        "missing_measurements": {
+          "$ref": "#/$defs/Missing"
+        }
+      },
+      "required": [
+        "fail_on",
+        "missing_measurements"
+      ],
+      "type": "object"
+    },
+    "ProfileSelection": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "default": null,
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "Project": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "Reporting": {
+      "additionalProperties": false,
+      "properties": {
+        "formats": {
+          "items": {
+            "$ref": "#/$defs/Format"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "formats"
+      ],
+      "type": "object"
+    },
+    "Request": {
+      "additionalProperties": false,
+      "properties": {
+        "headers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {},
+          "type": "object"
+        },
+        "json": {
+          "default": null
+        },
+        "method": {
+          "enum": [
+            "GET",
+            "POST",
+            "PUT",
+            "PATCH",
+            "DELETE"
+          ],
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "method",
+        "path"
+      ],
+      "type": "object"
+    },
+    "Scenario": {
+      "additionalProperties": false,
+      "properties": {
+        "expect": {
+          "$ref": "#/$defs/Expectation"
+        },
+        "fault": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Fault"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "fixtures": {
+          "default": [],
+          "items": true,
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
+        },
+        "request": {
+          "$ref": "#/$defs/Request"
+        },
+        "weight": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name",
+        "weight",
+        "request",
+        "expect"
+      ],
+      "type": "object"
+    },
+    "Service": {
+      "enum": [
+        "d1",
+        "kv",
+        "fetch"
+      ],
+      "type": "string"
+    },
+    "Severity": {
+      "enum": [
+        "informational",
+        "warning",
+        "critical"
+      ],
+      "type": "string"
+    },
+    "Target": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "$ref": "#/$defs/Mode"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "url",
+        "mode"
+      ],
+      "type": "object"
+    },
+    "Traffic": {
+      "additionalProperties": false,
+      "properties": {
+        "existing_usage": {
+          "additionalProperties": {
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "default": {},
+          "type": "object"
+        },
+        "requests_per_day": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "requests_per_day"
+      ],
+      "type": "object"
+    },
+    "WorkerBudgets": {
+      "additionalProperties": false,
+      "properties": {
+        "max_cpu_ms_per_request": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "max_external_subrequests_per_request": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "max_requests_per_day": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "Workload": {
+      "additionalProperties": false,
+      "properties": {
+        "concurrency": {
+          "format": "uint",
+          "maximum": 64,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "requests_per_scenario": {
+          "format": "uint",
+          "maximum": 10000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "scenarios": {
+          "items": {
+            "$ref": "#/$defs/Scenario"
+          },
+          "maxItems": 100,
+          "minItems": 1,
+          "type": "array"
+        },
+        "seed": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "timeout_ms": {
+          "format": "uint64",
+          "maximum": 60000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "warmup_requests": {
+          "default": 0,
+          "format": "uint",
+          "maximum": 1000,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "seed",
+        "concurrency",
+        "requests_per_scenario",
+        "timeout_ms",
+        "scenarios"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "budgets": {
+      "$ref": "#/$defs/Budgets"
+    },
+    "policy": {
+      "$ref": "#/$defs/Policy"
+    },
+    "profile": {
+      "$ref": "#/$defs/ProfileSelection"
+    },
+    "project": {
+      "$ref": "#/$defs/Project"
+    },
+    "reporting": {
+      "$ref": "#/$defs/Reporting"
+    },
+    "target": {
+      "$ref": "#/$defs/Target"
+    },
+    "traffic": {
+      "$ref": "#/$defs/Traffic"
+    },
+    "version": {
+      "const": 1,
+      "format": "uint32",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "workload": {
+      "$ref": "#/$defs/Workload"
+    }
+  },
+  "required": [
+    "version",
+    "project",
+    "target",
+    "profile",
+    "workload",
+    "traffic",
+    "budgets",
+    "policy",
+    "reporting"
+  ],
+  "title": "Config",
+  "type": "object"
+}

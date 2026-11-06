@@ -1,0 +1,638 @@
+{
+  "$defs": {
+    "Finding": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/Severity"
+        }
+      },
+      "required": [
+        "severity",
+        "code",
+        "message"
+      ],
+      "type": "object"
+    },
+    "Metric": {
+      "additionalProperties": false,
+      "properties": {
+        "complete": {
+          "type": "boolean"
+        },
+        "note": {
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "samples": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "value": {
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "provenance",
+        "samples",
+        "complete",
+        "note"
+      ],
+      "type": "object"
+    },
+    "Operation": {
+      "additionalProperties": false,
+      "properties": {
+        "attempts": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "failures": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "successes": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "units": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "attempts",
+        "successes",
+        "failures",
+        "units"
+      ],
+      "type": "object"
+    },
+    "Profile": {
+      "additionalProperties": false,
+      "properties": {
+        "daily": {
+          "additionalProperties": {
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "type": "object"
+        },
+        "invocation": {
+          "additionalProperties": {
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "type": "object"
+        },
+        "name": {
+          "type": "string"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "schema_version": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "sources": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "storage": {
+          "additionalProperties": {
+            "format": "uint64",
+            "minimum": 0,
+            "type": "integer"
+          },
+          "type": "object"
+        },
+        "verified_on": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "schema_version",
+        "name",
+        "verified_on",
+        "sources",
+        "daily",
+        "invocation",
+        "storage",
+        "notes"
+      ],
+      "type": "object"
+    },
+    "Projection": {
+      "additionalProperties": false,
+      "properties": {
+        "budget": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "daily": {
+          "$ref": "#/$defs/Metric"
+        },
+        "exhaustion_hours": {
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "metric": {
+          "type": "string"
+        },
+        "observed_subtotal": {
+          "format": "double",
+          "type": "number"
+        },
+        "per_request": {
+          "$ref": "#/$defs/Metric"
+        },
+        "utilization_percent": {
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "metric",
+        "per_request",
+        "daily",
+        "observed_subtotal",
+        "budget"
+      ],
+      "type": "object"
+    },
+    "Provenance": {
+      "enum": [
+        "measured_local",
+        "measured_remote",
+        "estimated",
+        "simulated",
+        "unavailable"
+      ],
+      "type": "string"
+    },
+    "Query": {
+      "additionalProperties": false,
+      "properties": {
+        "duration_ms": {
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "fingerprint": {
+          "type": "string"
+        },
+        "method": {
+          "type": "string"
+        },
+        "rows_read": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "rows_written": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "sql": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "success": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "fingerprint",
+        "method",
+        "success"
+      ],
+      "type": "object"
+    },
+    "QuerySummary": {
+      "additionalProperties": false,
+      "properties": {
+        "executions": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "fingerprint": {
+          "type": "string"
+        },
+        "peak_rows_read": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "projected_daily_rows_read": {
+          "format": "double",
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "rows_read": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "rows_written": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "sql": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "fingerprint",
+        "executions",
+        "provenance"
+      ],
+      "type": "object"
+    },
+    "RequestResult": {
+      "additionalProperties": false,
+      "properties": {
+        "error": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "index": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "latency_ms": {
+          "format": "double",
+          "type": "number"
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "scenario": {
+          "type": "string"
+        },
+        "status": {
+          "format": "uint16",
+          "maximum": 65535,
+          "minimum": 0,
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "telemetry": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Telemetry"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "timeout": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "index",
+        "scenario",
+        "passed",
+        "timeout",
+        "latency_ms"
+      ],
+      "type": "object"
+    },
+    "ScenarioSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "faults_triggered": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "normalized_weight": {
+          "format": "double",
+          "type": "number"
+        },
+        "samples": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "successful": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "timeouts": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "transport_errors": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "unexpected_status": {
+          "format": "uint",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "weight": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name",
+        "weight",
+        "normalized_weight",
+        "samples",
+        "successful",
+        "unexpected_status",
+        "transport_errors",
+        "timeouts",
+        "faults_triggered"
+      ],
+      "type": "object"
+    },
+    "Severity": {
+      "enum": [
+        "informational",
+        "warning",
+        "critical"
+      ],
+      "type": "string"
+    },
+    "Telemetry": {
+      "additionalProperties": false,
+      "properties": {
+        "complete": {
+          "type": "boolean"
+        },
+        "counters": {
+          "additionalProperties": {
+            "format": "uint64",
+            "minimum": 0,
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "type": "object"
+        },
+        "coverage": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "dropped": {
+          "format": "uint64",
+          "minimum": 0,
+          "type": "integer"
+        },
+        "faults": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "operations": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Operation"
+          },
+          "type": "object"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        },
+        "queries": {
+          "items": {
+            "$ref": "#/$defs/Query"
+          },
+          "type": "array"
+        },
+        "request_id": {
+          "type": "string"
+        },
+        "run_id": {
+          "type": "string"
+        },
+        "scenario": {
+          "type": "string"
+        },
+        "version": {
+          "format": "uint32",
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "version",
+        "request_id",
+        "run_id",
+        "scenario",
+        "provenance",
+        "counters",
+        "operations",
+        "queries",
+        "faults",
+        "dropped",
+        "complete",
+        "coverage"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "assumptions": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "cpu_ms": {
+      "$ref": "#/$defs/Metric"
+    },
+    "elapsed_ms": {
+      "format": "double",
+      "type": "number"
+    },
+    "exit_code": {
+      "format": "uint8",
+      "maximum": 255,
+      "minimum": 0,
+      "type": "integer"
+    },
+    "findings": {
+      "items": {
+        "$ref": "#/$defs/Finding"
+      },
+      "type": "array"
+    },
+    "latency_ms": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Metric"
+      },
+      "type": "object"
+    },
+    "mode": {
+      "type": "string"
+    },
+    "peaks": {
+      "additionalProperties": {
+        "$ref": "#/$defs/Metric"
+      },
+      "type": "object"
+    },
+    "profile": {
+      "$ref": "#/$defs/Profile"
+    },
+    "project": {
+      "type": "string"
+    },
+    "projections": {
+      "items": {
+        "$ref": "#/$defs/Projection"
+      },
+      "type": "array"
+    },
+    "queries": {
+      "items": {
+        "$ref": "#/$defs/QuerySummary"
+      },
+      "type": "array"
+    },
+    "requests": {
+      "items": {
+        "$ref": "#/$defs/RequestResult"
+      },
+      "type": "array"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "scenarios": {
+      "items": {
+        "$ref": "#/$defs/ScenarioSummary"
+      },
+      "type": "array"
+    },
+    "schema_version": {
+      "format": "uint32",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "seed": {
+      "format": "uint64",
+      "minimum": 0,
+      "type": "integer"
+    },
+    "throughput": {
+      "$ref": "#/$defs/Metric"
+    },
+    "timestamp": {
+      "type": "string"
+    },
+    "tool_version": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "tool_version",
+    "run_id",
+    "timestamp",
+    "project",
+    "mode",
+    "profile",
+    "seed",
+    "requests",
+    "scenarios",
+    "elapsed_ms",
+    "throughput",
+    "latency_ms",
+    "cpu_ms",
+    "projections",
+    "peaks",
+    "queries",
+    "findings",
+    "assumptions",
+    "exit_code"
+  ],
+  "title": "Report",
+  "type": "object"
+}

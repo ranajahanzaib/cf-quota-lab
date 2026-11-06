@@ -72,3 +72,10 @@ yarn-error.log*
 
 # Python
 venv
+
+# QuotaLab local runs
+.wrangler/
+.dev.vars*
+reports/
+
+pnpm-debug.log*

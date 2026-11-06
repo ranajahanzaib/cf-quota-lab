@@ -1,0 +1,44 @@
+name: QuotaLab healthy example
+on:
+  workflow_dispatch:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  budget:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      WRANGLER_SEND_METRICS: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12.3.4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: cargo build --locked
+      - name: Enforce budgets
+        run: |
+          target/debug/quotalab test --config examples/basic-worker/quotalab.yaml \
+            --managed --wrangler-config examples/basic-worker/wrangler.jsonc \
+            --seed-sql examples/basic-worker/migrations/0001_users.sql \
+            --output reports/healthy
+      - name: Summary
+        if: always()
+        shell: bash
+        run: |
+          if [ -f reports/healthy/report.md ]; then
+            cat reports/healthy/report.md >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: healthy-resource-report
+          path: reports/healthy/
+          if-no-files-found: ignore

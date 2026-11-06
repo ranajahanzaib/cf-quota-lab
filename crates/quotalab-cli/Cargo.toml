@@ -1,0 +1,24 @@
+[package]
+name = "quotalab"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+[dependencies]
+quotalab-core = { path = "../quotalab-core" }
+serde.workspace = true
+serde_json.workspace = true
+anyhow.workspace = true
+clap = { version = "4", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.13", default-features = false, features = ["json", "rustls"] }
+futures-util = "0.3"
+tempfile = "3"
+uuid = { version = "1", features = ["v4"] }
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+base64 = "0.22"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+url = "2"
+json5 = "0.4"
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"

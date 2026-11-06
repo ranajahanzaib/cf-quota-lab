@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "name": "workers-free",
+  "verified_on": "2026-11-01",
+  "sources": [
+    "https://developers.cloudflare.com/workers/platform/limits/",
+    "https://developers.cloudflare.com/d1/platform/pricing/",
+    "https://developers.cloudflare.com/d1/platform/limits/",
+    "https://developers.cloudflare.com/kv/platform/pricing/",
+    "https://developers.cloudflare.com/kv/platform/limits/",
+    "https://developers.cloudflare.com/analytics/analytics-engine/pricing/"
+  ],
+  "daily": {
+    "worker_requests": 100000,
+    "d1_rows_read": 5000000,
+    "d1_rows_written": 100000,
+    "kv_reads": 100000,
+    "kv_writes": 1000,
+    "kv_deletes": 1000,
+    "kv_lists": 1000
+  },
+  "invocation": {
+    "external_subrequests": 50,
+    "cloudflare_service_subrequests": 1000,
+    "d1_queries": 50,
+    "cpu_ms": 10
+  },
+  "storage": {
+    "d1_account_bytes": 5000000000,
+    "d1_database_bytes": 500000000,
+    "kv_account_bytes": 1000000000
+  },
+  "notes": [
+    "Daily limits are shared account allowances; this tool projects one configured workload.",
+    "External fetch wrapper counts calls, not hidden redirect hops; partial coverage.",
+    "Local wall-clock latency is not CPU time. CPU enforcement includes runtime nuances.",
+    "D1 batch counts as one invocation query; rows and statement executions remain separately accounted.",
+    "Analytics Engine optional reference: 100000 points/day, 10000 reads/day; no remote querying implemented.",
+    "KV same-key writes: 1/second. Bulk reads count keys for daily reads, one invocation service request."
+  ]
+}
